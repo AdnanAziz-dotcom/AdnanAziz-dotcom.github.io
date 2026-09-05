@@ -419,6 +419,23 @@
       object-fit: cover;
     }
     .nda-label { color: var(--muted); font-size: 0.7rem; text-align: center; padding: 8px; }
+    .nda-thumb { justify-content: center; flex-direction: column; }
+    .status-badge {
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .status-done {
+      background: rgba(63,185,80,0.1);
+      border: 1px solid rgba(63,185,80,0.25);
+      color: #3fb950;
+    }
+    .status-progress {
+      background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.25);
+      color: var(--accent);
+    }
     .other-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
     .other-meta { display: flex; align-items: center; gap: 10px; }
     .other-category {
@@ -835,26 +852,47 @@
     }
 
     /* ── Render Other Projects ───────────────────────────── */
-    function renderOtherProjects(projects) {
+    async function checkImageExists(src) {
+      try {
+        const res = await fetch(src, { method: 'HEAD' });
+        return res.ok;
+      } catch { return false; }
+    }
+
+    async function resolveThumb(images, nda) {
+      if (nda) return null;
+      for (const src of (images || [])) {
+        if (await checkImageExists(src)) return src;
+      }
+      return 'images/default.png';
+    }
+
+    async function renderOtherProjects(projects) {
       const list = document.getElementById('other-projects-list');
       document.getElementById('other-count').textContent = `${projects.length} projects`;
-      list.innerHTML = projects.map(p => {
-        const firstImg = p.images && p.images.length > 0 ? p.images[0] : null;
-        let thumb;
+
+      // Resolve all thumbs in parallel
+      const thumbs = await Promise.all(projects.map(p => resolveThumb(p.images, p.nda)));
+
+      list.innerHTML = projects.map((p, idx) => {
+        const thumb = thumbs[idx];
+        let thumbHTML;
         if (p.nda) {
-          thumb = `<div class="other-thumb"><span class="nda-label">Under NDA</span></div>`;
-        } else if (firstImg) {
-          thumb = `<div class="other-thumb"><img src="${firstImg}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='No image'" /></div>`;
+          thumbHTML = `<div class="other-thumb nda-thumb"><span class="nda-label">Under NDA</span></div>`;
         } else {
-          thumb = `<div class="other-thumb">No image</div>`;
+          thumbHTML = `<div class="other-thumb"><img src="${thumb}" alt="${p.title}" loading="lazy" onerror="this.src='images/default.png'" /></div>`;
         }
+
+        const statusClass = p.status === 'In Progress' ? 'status-progress' : 'status-done';
+
         return `
           <div class="other-card" data-id="${p.id}" data-type="other" tabindex="0" role="button" aria-label="View ${p.title} details">
-            ${thumb}
+            ${thumbHTML}
             <div class="other-body">
               <div class="other-meta">
                 <span class="other-category">${p.category}</span>
                 <span class="card-year">${p.year}</span>
+                <span class="status-badge ${statusClass}">${p.status}</span>
               </div>
               <div class="card-title">${p.title}</div>
               <div class="card-desc">${p.shortDescription}</div>
@@ -911,7 +949,7 @@
         gallery.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:0.85rem;">${p.nda ? 'Screenshots under NDA' : 'No images available'}</div>`;
       } else {
         gallery.innerHTML = images.map((src, i) =>
-          `<img src="${src}" alt="${p.title} screenshot ${i+1}" class="${i===0?'active':''}" onerror="this.style.display='none'" />`
+          `<img src="${src}" alt="${p.title} screenshot ${i+1}" class="${i===0?'active':''}" onerror="this.src='images/default.png'" />`
         ).join('') + (images.length > 1 ? `<div class="gallery-nav">${images.map((_,i) => `<button class="gallery-dot ${i===0?'active':''}" data-idx="${i}" aria-label="Image ${i+1}"></button>`).join('')}</div>` : '');
 
         // Gallery navigation
@@ -979,7 +1017,7 @@
         allOther = other;
         renderInfo(info);
         renderMyProjects(games);
-        renderOtherProjects(other);
+        await renderOtherProjects(other);
         initCounters();
       } catch (err) {
         console.error('Portfolio load error:', err);
