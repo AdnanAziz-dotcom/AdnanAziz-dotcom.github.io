@@ -1,0 +1,22 @@
+{
+  "name": "Your Full Name",
+  "title": "Unity Game Developer",
+  "tagline": "Multiplayer Expert · PlayFab & Firebase · VR · Data Science",
+  "bio": "Unity developer since 2020, specializing in multiplayer game development, backend integrations (PlayFab, Firebase), and API connectivity. I also bring a data science background using Python, Power BI, and Tableau.",
+  "email": "your@email.com",
+  "linkedin": "https://linkedin.com/in/yourprofile",
+  "github": "https://github.com/yourusername",
+  "skills": [
+    "Unity (C#)",
+    "Multiplayer / Netcode",
+    "PlayFab",
+    "Firebase",
+    "REST APIs",
+    "VR Development",
+    "Python",
+    "Power BI",
+    "Tableau"
+  ],
+  "yearsOfExperience": 5,
+  "availableForWork": true
+}

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Unity Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────── */
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #21262d;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent-dim:#1f3a5f;
+      --text:      #f0f6fc;
+      --muted:     #8b949e;
+      --tag-bg:    #21262d;
+      --tag-text:  #79c0ff;
+      --radius:    10px;
+      --modal-bg:  rgba(1,4,9,0.85);
+    }
+
+    [data-theme="light"] {
+      --bg:        #ffffff;
+      --surface:   #f6f8fa;
+      --surface2:  #eaeef2;
+      --border:    #d0d7de;
+      --accent:    #0969da;
+      --accent-dim:#ddf4ff;
+      --text:      #1f2328;
+      --muted:     #57606a;
+      --tag-bg:    #ddf4ff;
+      --tag-text:  #0550ae;
+      --modal-bg:  rgba(0,0,0,0.5);
+    }
+
+    /* ─── Reset ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.25s, color 0.25s;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: inherit; }
+
+    /* ─── Layout ─────────────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── Nav ────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* Theme toggle */
+    .theme-toggle {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+    }
+    .theme-toggle:hover { color: var(--text); background: var(--surface); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* ─── Hero ───────────────────────────────────────────── */
+    .hero {
+      padding: 80px 0 64px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .hero-label {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text);
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+    .hero-bio {
+      color: var(--muted);
+      max-width: 580px;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    /* Stats row */
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 2px; }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); }
+
+    /* CTA row */
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: none;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { opacity: 0.88; text-decoration: none; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); background: var(--surface2); text-decoration: none; }
+    .btn svg { width: 15px; height: 15px; fill: currentColor; }
+
+    /* Availability badge */
+    .avail-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .avail-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #3fb950;
+    }
+
+    /* ─── Skills ─────────────────────────────────────────── */
+    .skills-section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    .skills-section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .skill-tag {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* ─── Section titles ─────────────────────────────────── */
+    .section { padding: 64px 0; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-count { font-size: 0.85rem; color: var(--muted); }
+
+    /* ─── My Projects grid ───────────────────────────────── */
+    .my-projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .project-card.featured {
+      grid-column: span 2;
+    }
+    .card-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: var(--surface2);
+    }
+    .card-image-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .card-year { font-size: 0.75rem; color: var(--muted); }
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .card-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.55; flex: 1; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .tag {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .play-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .play-link svg { width: 14px; height: 14px; fill: currentColor; }
+    .details-hint { font-size: 0.78rem; color: var(--muted); }
+
+    /* ─── Other Projects list ────────────────────────────── */
+    .other-projects-list { display: flex; flex-direction: column; gap: 16px; }
+    .other-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .other-card:hover { border-color: var(--accent); }
+    .other-thumb {
+      width: 120px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 8px;
+    }
+    .other-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .nda-label { color: var(--muted); font-size: 0.7rem; text-align: center; padding: 8px; }
+    .other-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+    .other-meta { display: flex; align-items: center; gap: 10px; }
+    .other-category {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* ─── Contact ────────────────────────────────────────── */
+    .contact-section {
+      padding: 64px 0;
+      border-top: 1px solid var(--border);
+    }
+    .contact-section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .contact-section p { color: var(--muted); margin-bottom: 28px; font-size: 0.95rem; }
+    .contact-links { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ─── Modal ──────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--modal-bg);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-image-gallery {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface2);
+      overflow: hidden;
+      border-radius: 14px 14px 0 0;
+    }
+    .modal-image-gallery img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .modal-image-gallery img.active { opacity: 1; }
+    .gallery-nav {
+      position: absolute;
+      bottom: 12px; left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+    .gallery-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s;
+    }
+    .gallery-dot.active { background: #fff; }
+    .modal-body { padding: 28px; }
+    .modal-body h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .modal-body p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 16px; }
+    .modal-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .project-card.featured { grid-column: span 1; }
+      .hero-stats { gap: 24px; }
+      .other-card { grid-template-columns: 90px 1fr; }
+      .other-thumb { width: 90px; }
+      .nav-links { gap: 16px; }
+    }
+    @media (max-width: 480px) {
+      .nav-links .hide-mobile { display: none; }
+    }
+
+    /* ─── Reduced motion ─────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero { animation: none; opacity: 1; }
+      * { transition-duration: 0s !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <span class="nav-name" id="nav-name">Loading...</span>
+      <ul class="nav-links">
+        <li class="hide-mobile"><a href="#my-games">Games</a></li>
+        <li class="hide-mobile"><a href="#other-projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <svg id="theme-icon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+            <span id="theme-label">System</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-label" id="hero-label">Unity Game Developer</div>
+      <h1 id="hero-name">Loading...</h1>
+      <p class="hero-bio" id="hero-bio">Loading...</p>
+
+      <div class="hero-stats" id="hero-stats"></div>
+
+      <div class="hero-cta" id="hero-cta"></div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills-section">
+    <div class="container">
+      <h2>Skills & Tools</h2>
+      <div class="skills-list" id="skills-list"></div>
+    </div>
+  </section>
+
+  <!-- MY GAMES -->
+  <section class="section" id="my-games">
+    <div class="container">
+      <div class="section-header">
+        <h2>My Games</h2>
+        <span class="section-count" id="games-count"></span>
+      </div>
+      <div class="my-projects-grid" id="my-projects-grid"></div>
+    </div>
+  </section>
+
+  <!-- OTHER PROJECTS -->
+  <section class="section" id="other-projects" style="border-top: 1px solid var(--border); padding-top: 64px;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Other Projects</h2>
+        <span class="section-count" id="other-count"></span>
+      </div>
+      <div class="other-projects-list" id="other-projects-list"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <h2>Get in touch</h2>
+      <p id="contact-bio">Available for freelance and full-time roles.</p>
+      <div class="contact-links" id="contact-links"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <span id="footer-name">Portfolio</span> · Built with GitHub Pages
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+      <div class="modal-image-gallery" id="modal-gallery"></div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ── Theme ───────────────────────────────────────────── */
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeLabel = document.getElementById('theme-label');
+
+    const THEMES = ['auto', 'dark', 'light'];
+    const ICONS = {
+      auto:  '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>',
+      dark:  '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>',
+      light: '<path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM12 0h1v4h-1V0zm0 20h1v4h-1v-4zM0 12v-1h4v1H0zm20 0v-1h4v1h-4zm-2.636-8.778.707.707-2.828 2.829-.707-.707 2.828-2.829zm-12.728 0 2.828 2.829-.707.707L4.929 3.929l.707-.707zm12.728 14.142-2.828-2.829.707-.707 2.828 2.829-.707.707zm-12.728 0-.707-.707 2.828-2.829.707.707-2.828 2.829z"/>'
+    };
+    const LABELS = { auto: 'System', dark: 'Dark', light: 'Light' };
+
+    let currentTheme = localStorage.getItem('theme') || 'auto';
+
+    function applyTheme(t) {
+      currentTheme = t;
+      localStorage.setItem('theme', t);
+      if (t === 'auto') {
+        const pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        html.setAttribute('data-theme', pref);
+      } else {
+        html.setAttribute('data-theme', t);
+      }
+      themeIcon.innerHTML = ICONS[t];
+      themeLabel.textContent = LABELS[t];
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const next = THEMES[(THEMES.indexOf(currentTheme) + 1) % THEMES.length];
+      applyTheme(next);
+    });
+
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+      if (currentTheme === 'auto') applyTheme('auto');
+    });
+
+    applyTheme(currentTheme);
+
+    /* ── Data Loading ────────────────────────────────────── */
+    async function loadJSON(path) {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error(`Failed to load ${path}`);
+      return res.json();
+    }
+
+    /* ── Helpers ─────────────────────────────────────────── */
+    function makeTags(tags) {
+      return tags.map(t => `<span class="tag">${t}</span>`).join('');
+    }
+
+    function makeImageOrPlaceholder(src, alt) {
+      if (!src) return `<div class="card-image-placeholder">No image yet</div>`;
+      return `<img class="card-image" src="${src}" alt="${alt}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-image-placeholder\\'>Image not found</div>'" />`;
+    }
+
+    /* ── Render Info ─────────────────────────────────────── */
+    function renderInfo(info) {
+      document.title = `${info.name} — Unity Developer`;
+      document.getElementById('nav-name').textContent = info.name;
+      document.getElementById('hero-name').textContent = info.name;
+      document.getElementById('hero-label').textContent = info.title;
+      document.getElementById('hero-bio').textContent = info.bio;
+      document.getElementById('footer-name').textContent = info.name;
+
+      // Stats
+      const statsEl = document.getElementById('hero-stats');
+      statsEl.innerHTML = `
+        <div class="stat-item">
+          <span class="stat-num">${info.yearsOfExperience}+</span>
+          <span class="stat-label">Years in Unity</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Games on Play Store</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">${info.skills.length}</span>
+          <span class="stat-label">Skills & Tools</span>
+        </div>
+      `;
+
+      // CTA
+      const ctaEl = document.getElementById('hero-cta');
+      let ctaHTML = '';
+      if (info.email) ctaHTML += `<a href="mailto:${info.email}" class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Get in touch
+      </a>`;
+      if (info.linkedin) ctaHTML += `<a href="${info.linkedin}" target="_blank" rel="noopener" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        LinkedIn
+      </a>`;
+      if (info.availableForWork) ctaHTML += `<span class="avail-badge"><span class="avail-dot"></span>Available for work</span>`;
+      ctaEl.innerHTML = ctaHTML;
+
+      // Contact section
+      document.getElementById('contact-bio').textContent = info.availableForWork
+        ? "Open to freelance projects and full-time roles. Let's build something together."
+        : "Not actively looking, but feel free to reach out.";
+      const contactLinks = document.getElementById('contact-links');
+      let cl = '';
+      if (info.email) cl += `<a href="mailto:${info.email}" class="btn btn-primary">Email me</a>`;
+      if (info.linkedin) cl += `<a href="${info.linkedin}" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>`;
+      if (info.github) cl += `<a href="${info.github}" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>`;
+      contactLinks.innerHTML = cl;
+
+      // Skills
+      const skillsEl = document.getElementById('skills-list');
+      skillsEl.innerHTML = info.skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+    }
+
+    /* ── Render My Projects ──────────────────────────────── */
+    function renderMyProjects(projects) {
+      const grid = document.getElementById('my-projects-grid');
+      document.getElementById('games-count').textContent = `${projects.length} published`;
+      grid.innerHTML = projects.map(p => `
+        <div class="project-card ${p.featured ? 'featured' : ''}" data-id="${p.id}" data-type="game" tabindex="0" role="button" aria-label="View ${p.title} details">
+          ${makeImageOrPlaceholder(p.image, p.title)}
+          <div class="card-body">
+            <span class="card-year">${p.year} · ${p.platform}</span>
+            <div class="card-title">${p.title}</div>
+            <div class="card-desc">${p.shortDescription}</div>
+            <div class="card-tags">${makeTags(p.tags)}</div>
+          </div>
+          <div class="card-footer">
+            ${p.playStoreLink ? `<a class="play-link" href="${p.playStoreLink}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24"><path d="m3 20.5 17-8.5L3 3.5v6l10 2-10 2v6z"/></svg>
+              View on Play Store
+            </a>` : ''}
+            <span class="details-hint">Click for details</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ── Render Other Projects ───────────────────────────── */
+    function renderOtherProjects(projects) {
+      const list = document.getElementById('other-projects-list');
+      document.getElementById('other-count').textContent = `${projects.length} projects`;
+      list.innerHTML = projects.map(p => {
+        const firstImg = p.images && p.images.length > 0 ? p.images[0] : null;
+        let thumb;
+        if (p.nda) {
+          thumb = `<div class="other-thumb"><span class="nda-label">Under NDA</span></div>`;
+        } else if (firstImg) {
+          thumb = `<div class="other-thumb"><img src="${firstImg}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='No image'" /></div>`;
+        } else {
+          thumb = `<div class="other-thumb">No image</div>`;
+        }
+        return `
+          <div class="other-card" data-id="${p.id}" data-type="other" tabindex="0" role="button" aria-label="View ${p.title} details">
+            ${thumb}
+            <div class="other-body">
+              <div class="other-meta">
+                <span class="other-category">${p.category}</span>
+                <span class="card-year">${p.year}</span>
+              </div>
+              <div class="card-title">${p.title}</div>
+              <div class="card-desc">${p.shortDescription}</div>
+              <div class="card-tags">${makeTags(p.tags)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ── Modal ───────────────────────────────────────────── */
+    let allGames = [], allOther = [];
+    const overlay = document.getElementById('modal-overlay');
+    const modalClose = document.getElementById('modal-close');
+
+    function openModal(id, type) {
+      const p = type === 'game' ? allGames.find(g => g.id === id) : allOther.find(o => o.id === id);
+      if (!p) return;
+
+      const gallery = document.getElementById('modal-gallery');
+      const body = document.getElementById('modal-body');
+
+      // Build gallery
+      const images = type === 'game' ? (p.image ? [p.image] : []) : (p.images || []);
+      if (images.length === 0 || p.nda) {
+        gallery.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:0.85rem;">${p.nda ? 'Screenshots under NDA' : 'No images available'}</div>`;
+      } else {
+        gallery.innerHTML = images.map((src, i) =>
+          `<img src="${src}" alt="${p.title} screenshot ${i+1}" class="${i===0?'active':''}" onerror="this.style.display='none'" />`
+        ).join('') + (images.length > 1 ? `<div class="gallery-nav">${images.map((_,i) => `<button class="gallery-dot ${i===0?'active':''}" data-idx="${i}" aria-label="Image ${i+1}"></button>`).join('')}</div>` : '');
+
+        // Gallery navigation
+        gallery.querySelectorAll('.gallery-dot').forEach(dot => {
+          dot.addEventListener('click', () => {
+            const idx = parseInt(dot.dataset.idx);
+            gallery.querySelectorAll('img').forEach((img, i) => img.classList.toggle('active', i === idx));
+            gallery.querySelectorAll('.gallery-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+          });
+        });
+      }
+
+      // Build body
+      let footerHTML = '';
+      if (type === 'game' && p.playStoreLink) {
+        footerHTML = `<a href="${p.playStoreLink}" target="_blank" rel="noopener" class="btn btn-primary">View on Play Store</a>`;
+      }
+      body.innerHTML = `
+        <h3>${p.title}</h3>
+        <p>${p.fullDescription}</p>
+        <div class="card-tags" style="margin-bottom:16px">${makeTags(p.tags)}</div>
+        <div class="modal-footer-row">
+          ${footerHTML}
+          <span class="card-year">${p.year}${p.platform ? ' · ' + p.platform : ''}${p.category ? ' · ' + p.category : ''}</span>
+        </div>
+      `;
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    document.addEventListener('click', e => {
+      const card = e.target.closest('[data-type]');
+      if (!card) return;
+      openModal(parseInt(card.dataset.id), card.dataset.type);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const card = document.activeElement.closest('[data-type]');
+        if (card) openModal(parseInt(card.dataset.id), card.dataset.type);
+      }
+    });
+
+    /* ── Init ────────────────────────────────────────────── */
+    async function init() {
+      try {
+        const [info, games, other] = await Promise.all([
+          loadJSON('data/info.json'),
+          loadJSON('data/myprojects.json'),
+          loadJSON('data/otherprojects.json')
+        ]);
+        allGames = games;
+        allOther = other;
+        renderInfo(info);
+        renderMyProjects(games);
+        renderOtherProjects(other);
+      } catch (err) {
+        console.error('Portfolio load error:', err);
+        document.getElementById('hero-name').textContent = 'Could not load portfolio data.';
+        document.getElementById('hero-bio').textContent = 'Check that data/info.json, data/myprojects.json, and data/otherprojects.json exist.';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

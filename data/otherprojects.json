@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Client Project Name",
+    "shortDescription": "One-liner for the card.",
+    "fullDescription": "What this project was, what you built, and what tech you used.",
+    "images": ["images/proj1_a.jpg", "images/proj1_b.jpg"],
+    "tags": ["Unity", "PlayFab", "Mobile"],
+    "category": "Client Work",
+    "year": 2024,
+    "nda": false
+  },
+  {
+    "id": 2,
+    "title": "Office Project Name",
+    "shortDescription": "One-liner here.",
+    "fullDescription": "Description here.",
+    "images": ["images/proj2_a.jpg"],
+    "tags": ["VR", "Unity"],
+    "category": "Office",
+    "year": 2023,
+    "nda": true
+  },
+  {
+    "id": 3,
+    "title": "Another Project",
+    "shortDescription": "One-liner here.",
+    "fullDescription": "Description here.",
+    "images": ["images/proj3_a.jpg", "images/proj3_b.jpg"],
+    "tags": ["Firebase", "Multiplayer", "Unity"],
+    "category": "Client Work",
+    "year": 2022,
+    "nda": false
+  }
+]
