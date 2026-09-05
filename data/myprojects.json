@@ -1,38 +1,41 @@
 [
   {
     "id": 1,
-    "title": "Game Title One",
-    "shortDescription": "A short one-liner shown on the card.",
-    "fullDescription": "Longer description shown when user clicks for details. Talk about what the game is, what tech you used, any challenges you solved.",
-    "image": "images/game1.png",
-    "tags": ["Multiplayer", "Mobile", "Unity"],
+    "title": "Racing 3D: Drift & Multiplayer",
+    "shortDescription": "Online & offline 3D car racing with multiplayer lobbies, car upgrades, and real-time chat.",
+    "fullDescription": "A full-featured 3D car racing game with both online multiplayer and offline modes. The multiplayer system is built with Photon PUN 2, supporting multiple servers, real-time chat between players, and smooth lobby management. Offline mode includes vs AI races across multiple maps. Players can browse a car showroom, purchase vehicles, and upgrade or customize them. Features multiple tracks and a polished car progression system.",
+    "image": "images/game1.jpg",
+    "tags": ["Multiplayer", "PUN 2", "Car Racing", "Unity", "Mobile"],
     "platform": "Android",
-    "playStoreLink": "https://play.google.com/store/apps/details?id=com.yourpackage",
+    "playStoreLink": "https://play.google.com/store/apps/details?id=com.CarRacingSimulation.SuperCarRacing&pcampaignid=web_share",
+    "downloads": "1L+",
+    "featured": true,
+    "year": 2023
+  },
+  {
+    "id": 2,
+    "title": "Crazy Traffic Racer: Car Games",
+    "shortDescription": "High-speed traffic racing with multiple modes, maps, and car customization.",
+    "fullDescription": "A fast-paced traffic racing game where players weave through dense traffic across multiple maps and environments. Includes four distinct game modes: Time Attack, vs AI, Endless, and Free Mode — each offering a different racing experience. Players can customize and upgrade their cars, unlocking new vehicles as they progress. Designed for quick sessions with an addictive progression loop.",
+    "image": "images/game2.jpg",
+    "tags": ["Racing", "Traffic", "Single Player", "Unity", "Mobile"],
+    "platform": "Android",
+    "playStoreLink": "https://play.google.com/store/apps/details?id=com.carracing.trafficracinggame&pcampaignid=web_share",
+    "downloads": "1K+",
     "featured": true,
     "year": 2024
   },
   {
-    "id": 2,
-    "title": "Game Title Two",
-    "shortDescription": "One-liner here.",
-    "fullDescription": "Detailed description here.",
-    "image": "images/game2.jpg",
-    "tags": ["VR", "Single Player", "Unity"],
-    "platform": "Android",
-    "playStoreLink": "https://play.google.com/store/apps/details?id=com.yourpackage2",
-    "featured": true,
-    "year": 2023
-  },
-  {
     "id": 3,
-    "title": "Game Title Three",
-    "shortDescription": "One-liner here.",
-    "fullDescription": "Detailed description here.",
-    "image": "images/game3.png",
-    "tags": ["Multiplayer", "Firebase", "Unity"],
+    "title": "Hexa Sort: Color Match",
+    "shortDescription": "A satisfying hexa-tile sorting puzzle with escalating difficulty across many levels.",
+    "fullDescription": "A relaxing yet challenging hexa sort puzzle game where players sort and match colored tiles into the correct hex slots. The difficulty scales naturally as levels progress, introducing new color combinations and tighter board layouts. Features two distinct map themes and a large number of handcrafted levels — designed to be easy to pick up but increasingly hard to master. A great test of spatial reasoning and patience.",
+    "image": "images/game3.jpg",
+    "tags": ["Puzzle", "Casual", "Color Match", "Unity", "Mobile"],
     "platform": "Android",
-    "playStoreLink": "https://play.google.com/store/apps/details?id=com.yourpackage3",
-    "featured": false,
-    "year": 2023
+    "playStoreLink": "https://play.google.com/store/apps/details?id=com.adgamesstudios.hexasortpuzzle&pcampaignid=web_share",
+    "downloads": "50+",
+    "featured": true,
+    "year": 2024
   }
 ]
