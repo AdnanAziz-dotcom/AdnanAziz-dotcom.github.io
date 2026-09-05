@@ -1,6 +1,7 @@
 {
   "name": "Your Full Name",
   "title": "Unity Game Developer",
+  "photo": "images/profile.jpg",
   "tagline": "Multiplayer Expert · PlayFab & Firebase · VR · Data Science",
   "bio": "Unity developer since 2020, specializing in multiplayer game development, backend integrations (PlayFab, Firebase), and API connectivity. I also bring a data science background using Python, Power BI, and Tableau.",
   "email": "your@email.com",
