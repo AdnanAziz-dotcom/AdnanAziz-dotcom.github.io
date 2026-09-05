@@ -378,6 +378,16 @@
     }
     .play-link svg { width: 14px; height: 14px; fill: currentColor; }
     .details-hint { font-size: 0.78rem; color: var(--muted); }
+    .downloads-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #3fb950;
+      background: rgba(63,185,80,0.1);
+      border: 1px solid rgba(63,185,80,0.25);
+      border-radius: 4px;
+      padding: 2px 8px;
+      white-space: nowrap;
+    }
 
     /* ─── Other Projects list ────────────────────────────── */
     .other-projects-list { display: flex; flex-direction: column; gap: 16px; }
@@ -442,6 +452,13 @@
       font-size: 0.8rem;
       color: var(--muted);
     }
+    .footer-studio {
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+    .footer-studio:hover { color: var(--accent); text-decoration: none; }
 
     /* ─── Modal ──────────────────────────────────────────── */
     .modal-overlay {
@@ -472,16 +489,22 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 50%;
-      width: 32px; height: 32px;
+      width: 36px; height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--muted);
       font-size: 1.1rem;
       line-height: 1;
-      transition: color 0.15s;
+      transition: color 0.15s, background 0.15s;
+      z-index: 10;
     }
-    .modal-close:hover { color: var(--text); }
+    .modal-close:hover { color: var(--text); background: var(--border); }
+    .modal-close-inline {
+      margin-left: auto;
+      font-size: 0.82rem;
+      padding: 8px 14px;
+    }
     .modal-image-gallery {
       position: relative;
       width: 100%;
@@ -634,7 +657,7 @@
   <!-- FOOTER -->
   <footer>
     <div class="container">
-      <span id="footer-name">Portfolio</span> · Built with GitHub Pages
+      <a href="https://play.google.com/store/apps/dev?id=7496753345913544169" target="_blank" rel="noopener" class="footer-studio">AD Games Studios</a>
     </div>
   </footer>
 
@@ -714,22 +737,23 @@
       document.getElementById('hero-bio').textContent = info.bio;
       document.getElementById('footer-name').textContent = info.name;
 
-      // Stats
+      // Stats — rendered with data-target for animated counting
       const statsEl = document.getElementById('hero-stats');
       statsEl.innerHTML = `
         <div class="stat-item">
-          <span class="stat-num">${info.yearsOfExperience}+</span>
+          <span class="stat-num" data-target="${info.yearsOfExperience}" data-suffix="+">0</span>
           <span class="stat-label">Years in Unity</span>
         </div>
         <div class="stat-item">
-          <span class="stat-num">3</span>
+          <span class="stat-num" data-target="3">0</span>
           <span class="stat-label">Games on Play Store</span>
         </div>
         <div class="stat-item">
-          <span class="stat-num">${info.skills.length}</span>
+          <span class="stat-num" data-target="${info.skills.length}">0</span>
           <span class="stat-label">Skills & Tools</span>
         </div>
       `;
+      initCounters();
 
       // CTA
       const ctaEl = document.getElementById('hero-cta');
@@ -780,7 +804,10 @@
         <div class="project-card ${p.featured ? 'featured' : ''}" data-id="${p.id}" data-type="game" tabindex="0" role="button" aria-label="View ${p.title} details">
           ${makeImageOrPlaceholder(p.image, p.title)}
           <div class="card-body">
-            <span class="card-year">${p.year} · ${p.platform}</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <span class="card-year">${p.year} · ${p.platform}</span>
+              ${p.downloads ? `<span class="downloads-badge">⬇ ${p.downloads} downloads</span>` : ''}
+            </div>
             <div class="card-title">${p.title}</div>
             <div class="card-desc">${p.shortDescription}</div>
             <div class="card-tags">${makeTags(p.tags)}</div>
@@ -827,6 +854,34 @@
       }).join('');
     }
 
+    /* ── Counter Animation ───────────────────────────────── */
+    function initCounters() {
+      const counters = document.querySelectorAll('.stat-num[data-target]');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1200;
+          const steps = 40;
+          const stepTime = duration / steps;
+          let current = 0;
+          const increment = target / steps;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            el.textContent = Math.floor(current) + suffix;
+          }, stepTime);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(c => observer.observe(c));
+    }
+
     /* ── Modal ───────────────────────────────────────────── */
     let allGames = [], allOther = [];
     const overlay = document.getElementById('modal-overlay');
@@ -865,11 +920,13 @@
       }
       body.innerHTML = `
         <h3>${p.title}</h3>
+        ${p.downloads ? `<div style="margin-bottom:12px"><span class="downloads-badge">⬇ ${p.downloads} downloads</span></div>` : ''}
         <p>${p.fullDescription}</p>
         <div class="card-tags" style="margin-bottom:16px">${makeTags(p.tags)}</div>
         <div class="modal-footer-row">
           ${footerHTML}
           <span class="card-year">${p.year}${p.platform ? ' · ' + p.platform : ''}${p.category ? ' · ' + p.category : ''}</span>
+          <button class="btn btn-ghost modal-close-inline" onclick="closeModal()">✕ Close</button>
         </div>
       `;
 
@@ -881,6 +938,7 @@
       overlay.classList.remove('open');
       document.body.style.overflow = '';
     }
+    window.closeModal = closeModal;
 
     modalClose.addEventListener('click', closeModal);
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
