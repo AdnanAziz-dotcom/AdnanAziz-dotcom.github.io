@@ -457,8 +457,17 @@
       font-weight: 500;
       letter-spacing: 0.02em;
       transition: color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     .footer-studio:hover { color: var(--accent); text-decoration: none; }
+    .footer-logo {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
 
     /* ─── Modal ──────────────────────────────────────────── */
     .modal-overlay {
@@ -657,7 +666,10 @@
   <!-- FOOTER -->
   <footer>
     <div class="container">
-      <a href="https://play.google.com/store/apps/dev?id=7496753345913544169" target="_blank" rel="noopener" class="footer-studio">AD Games Studios</a>
+      <a href="https://play.google.com/store/apps/dev?id=7496753345913544169" target="_blank" rel="noopener" class="footer-studio">
+        <img src="images/logo.png" alt="AD Games Studios" class="footer-logo" onerror="this.style.display='none'" />
+        AD Games Studios
+      </a>
     </div>
   </footer>
 
