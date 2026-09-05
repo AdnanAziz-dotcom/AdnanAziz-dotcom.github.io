@@ -594,6 +594,99 @@
       .nav-links .hide-mobile { display: none; }
     }
 
+    /* ─── Fiverr / Freelance Section ────────────────────── */
+    .fiverr-section {
+      padding: 56px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .fiverr-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+    .fiverr-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .fiverr-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .fiverr-desc {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+    .fiverr-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fiverr-right {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .fiverr-stat-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      text-align: center;
+      min-width: 160px;
+    }
+    .fiverr-big-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .fiverr-stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .fiverr-rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .fiverr-stars { color: #f1c40f; font-size: 1.1rem; letter-spacing: 1px; }
+    .fiverr-rating-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    @media (max-width: 700px) {
+      .fiverr-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .fiverr-right {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      .fiverr-stat-card { min-width: 130px; padding: 16px 20px; }
+    }
+
     /* ─── Reduced motion ─────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
       .hero { animation: none; opacity: 1; }
@@ -610,6 +703,7 @@
       <ul class="nav-links">
         <li class="hide-mobile"><a href="#my-games">Games</a></li>
         <li class="hide-mobile"><a href="#other-projects">Projects</a></li>
+        <li class="hide-mobile"><a href="#freelance">Freelance</a></li>
         <li><a href="#contact">Contact</a></li>
         <li>
           <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
@@ -646,6 +740,39 @@
     <div class="container">
       <h2>Skills & Tools</h2>
       <div class="skills-list" id="skills-list"></div>
+    </div>
+  </section>
+
+  <!-- FIVERR / FREELANCE -->
+  <section class="fiverr-section" id="freelance">
+    <div class="container">
+      <div class="fiverr-inner">
+        <div class="fiverr-left">
+          <div class="fiverr-eyebrow">Freelance</div>
+          <h2 class="fiverr-heading">110+ projects delivered on Fiverr</h2>
+          <p class="fiverr-desc">Offering Unity development services including multiplayer systems, bug fixes, feature additions, prototyping, and full project upgrades — all delivered with a 5-star rating.</p>
+          <div class="fiverr-services">
+            <span class="skill-tag">Multiplayer Systems</span>
+            <span class="skill-tag">Bug Fixing</span>
+            <span class="skill-tag">Prototyping</span>
+            <span class="skill-tag">Feature Additions</span>
+            <span class="skill-tag">Project Upgrades</span>
+          </div>
+        </div>
+        <div class="fiverr-right">
+          <div class="fiverr-stat-card">
+            <div class="fiverr-big-num" data-target="110" data-suffix="+">0</div>
+            <div class="fiverr-stat-label">Projects Completed</div>
+          </div>
+          <div class="fiverr-stat-card">
+            <div class="fiverr-rating">
+              <span class="fiverr-stars">★★★★★</span>
+              <span class="fiverr-rating-num">5.0</span>
+            </div>
+            <div class="fiverr-stat-label">Average Rating</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -905,7 +1032,7 @@
 
     /* ── Counter Animation ───────────────────────────────── */
     function initCounters() {
-      const counters = document.querySelectorAll('.stat-num[data-target]');
+      const counters = document.querySelectorAll('[data-target]');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
