@@ -118,6 +118,47 @@
     }
     @keyframes fadeIn { to { opacity: 1; } }
 
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* Profile photo */
+    .hero-photo-wrap {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding-top: 8px;
+    }
+    .hero-photo {
+      width: 200px;
+      height: 200px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      background: var(--surface2);
+      display: block;
+    }
+    .hero-photo-placeholder {
+      width: 200px;
+      height: 200px;
+      border-radius: 16px;
+      background: var(--surface2);
+      border: 2px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 16px;
+      line-height: 1.5;
+    }
+
     .hero-label {
       font-size: 0.85rem;
       color: var(--accent);
@@ -127,19 +168,37 @@
     }
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-size: clamp(2rem, 4vw, 3.2rem);
       font-weight: 700;
       line-height: 1.15;
       color: var(--text);
-      max-width: 720px;
       margin-bottom: 20px;
     }
     .hero-bio {
       color: var(--muted);
-      max-width: 580px;
+      max-width: 560px;
       font-size: 1rem;
       line-height: 1.7;
       margin-bottom: 36px;
+    }
+
+    @media (max-width: 760px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .hero-photo-wrap {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        order: -1;
+      }
+      .hero-photo, .hero-photo-placeholder {
+        width: 90px;
+        height: 90px;
+        border-radius: 12px;
+        font-size: 0.65rem;
+      }
     }
 
     /* Stats row */
@@ -516,13 +575,20 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container">
-      <div class="hero-label" id="hero-label">Unity Game Developer</div>
-      <h1 id="hero-name">Loading...</h1>
-      <p class="hero-bio" id="hero-bio">Loading...</p>
-
-      <div class="hero-stats" id="hero-stats"></div>
-
-      <div class="hero-cta" id="hero-cta"></div>
+      <div class="hero-inner">
+        <!-- Left: text -->
+        <div class="hero-text">
+          <div class="hero-label" id="hero-label">Unity Game Developer</div>
+          <h1 id="hero-name">Loading...</h1>
+          <p class="hero-bio" id="hero-bio">Loading...</p>
+          <div class="hero-stats" id="hero-stats"></div>
+          <div class="hero-cta" id="hero-cta"></div>
+        </div>
+        <!-- Right: photo -->
+        <div class="hero-photo-wrap" id="hero-photo-wrap">
+          <div class="hero-photo-placeholder">Add photo to images/profile.jpg</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -689,6 +755,17 @@
       if (info.linkedin) cl += `<a href="${info.linkedin}" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>`;
       if (info.github) cl += `<a href="${info.github}" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>`;
       contactLinks.innerHTML = cl;
+
+      // Photo
+      const photoWrap = document.getElementById('hero-photo-wrap');
+      if (info.photo) {
+        photoWrap.innerHTML = `<img
+          class="hero-photo"
+          src="${info.photo}"
+          alt="${info.name}"
+          onerror="this.outerHTML='<div class=\\'hero-photo-placeholder\\'>Image not found.<br/>Check images/profile.jpg</div>'"
+        />`;
+      }
 
       // Skills
       const skillsEl = document.getElementById('skills-list');
