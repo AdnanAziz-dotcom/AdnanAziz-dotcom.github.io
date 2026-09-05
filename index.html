@@ -735,7 +735,6 @@
       document.getElementById('hero-name').textContent = info.name;
       document.getElementById('hero-label').textContent = info.title;
       document.getElementById('hero-bio').textContent = info.bio;
-      document.getElementById('footer-name').textContent = info.name;
 
       // Stats — rendered with data-target for animated counting
       const statsEl = document.getElementById('hero-stats');
@@ -753,7 +752,7 @@
           <span class="stat-label">Skills & Tools</span>
         </div>
       `;
-      initCounters();
+
 
       // CTA
       const ctaEl = document.getElementById('hero-cta');
@@ -969,6 +968,7 @@
         renderInfo(info);
         renderMyProjects(games);
         renderOtherProjects(other);
+        initCounters();
       } catch (err) {
         console.error('Portfolio load error:', err);
         document.getElementById('hero-name').textContent = 'Could not load portfolio data.';
